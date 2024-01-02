@@ -42,7 +42,7 @@ class KeyVox {
                     const data = await response.json();
                     return data;
                 } catch (error) {
-                    console.log(error)
+                    console.log(error);
                 }
             },
 
@@ -52,7 +52,22 @@ class KeyVox {
              * @returns {Promise<Object>}
              */
             getById: async (id) => {
-                console.log(id);
+                try {
+                    let url = `${this.baseURL}/api/articles/${id}`;
+                    const headers = {
+                        key: this.apiKey,
+                    };
+
+                    const response = await fetch(url, {
+                        method: 'get',
+                        headers,
+                    });
+
+                    const data = await response.json();
+                    return data;
+                } catch (error) {
+                    console.log(error);
+                }
             },
 
             /**

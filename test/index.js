@@ -6,12 +6,14 @@ import 'dotenv/config'
 test('load key', async (t) => {
     const kv = new KeyVox(process.env.KEY)
 
-    const articles = await kv.articles.list({
-        itemsPerPage: 2,
-        page: 1
-    });
+    // const articles = await kv.articles.list({
+    //     itemsPerPage: 2,
+    //     page: 1
+    // });
 
-    console.log(articles)
+    const article = await kv.articles.getById(process.env.ARTICLE_ID)
+
+    console.log(article)
 });
 
 
