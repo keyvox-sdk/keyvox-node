@@ -17,32 +17,16 @@ class KeyVox {
              * @returns {Promise<Object>}
              */
             list: async (option) => {
-
                 const {itemsPerPage} = option ?? 2
-
-                try {
-                    let url = `${this.baseURL}/api/articles`;
-                    url = new URL(url)
-                    if (itemsPerPage) {
-                        url.searchParams.append('itemsPerPage', itemsPerPage)
-                    }
-
-                    url = url.toString();
-
-                    const headers = {
-                        key: this.apiKey,
-                    };
-
-                    const response = await fetch(url, {
-                        method: 'get',
-                        headers,
-                    });
-
-                    const data = await response.json();
-                    return data;
-                } catch (error) {
-                    console.log(error);
+                let url = `${this.baseURL}/api/articles`;
+                url = new URL(url)
+                if (itemsPerPage) {
+                    url.searchParams.append('itemsPerPage', itemsPerPage)
                 }
+
+                url = url.toString();
+
+                return await this.fetchData(url, 'get');
             },
 
             /**
@@ -51,22 +35,8 @@ class KeyVox {
              * @returns {Promise<Object>}
              */
             getById: async (id) => {
-                try {
-                    let url = `${this.baseURL}/api/articles/${id}`;
-                    const headers = {
-                        key: this.apiKey,
-                    };
-
-                    const response = await fetch(url, {
-                        method: 'get',
-                        headers,
-                    });
-
-                    const data = await response.json();
-                    return data;
-                } catch (error) {
-                    console.log(error);
-                }
+                const url = `${this.baseURL}/api/articles/${id}`;
+                return await this.fetchData(url, 'get');
             },
 
             /**
@@ -74,49 +44,59 @@ class KeyVox {
              * @param {string} slug
              */
             getBySlug: async (slug) => {
-                try {
-                    let url = `${this.baseURL}/api/articles/${slug}`;
-                    const headers = {
-                        key: this.apiKey,
-                    };
-
-                    const response = await fetch(url, {
-                        method: 'get',
-                        headers,
-                    });
-
-                    const data = await response.json();
-                    return data;
-                } catch (error) {
-                    console.log(error);
-                }
+                const url = `${this.baseURL}/api/articles/${slug}`;
+                return await this.fetchData(url, 'get');
             }
         }
 
         this.tags = {
+            /**
+             *
+             * @return {Promise<any|undefined>}
+             */
             list: async () => {
-                try {
-                    let url = `${this.baseURL}/api/tags`;
+                const url = `${this.baseURL}/api/tags`;
+                return await this.fetchData(url, 'get');
+            },
 
-                    const headers = {
-                        key: this.apiKey,
-                    };
+            /**
+             *
+             * @param {string} id
+             * @return {Promise<any|undefined>}
+             */
+            getById: async (id) => {
+                const url = `${this.baseURL}/api/tags/${id}`;
+                return await this.fetchData(url, 'get');
+            },
 
-                    const response = await fetch(url, {
-                        method: 'get',
-                        headers
-                    });
-
-                    const data = await response.json();
-                    return data;
-                } catch (error) {
-                    console.log(error)
-                }
-            }
+            /**
+             *
+             * @param {string} slug
+             * @return {Promise<void>}
+             */
+            getBySlug: async (slug) => {
+                const url = `${this.baseURL}/api/tags/${slug}`;
+                return await this.fetchData(url, 'get');
+            },
         }
     }
 
+    async fetchData(url, verb) {
+        try {
+            const headers = {
+                key: this.apiKey,
+            };
 
+            const response = await fetch(url, {
+                method: verb,
+                headers
+            });
+
+            return await response.json();
+        } catch (error) {
+            console.log(error)
+        }
+    }
 }
 
-export default KeyVox
+export default KeyVox;
