@@ -11,9 +11,12 @@ test('load key', async (t) => {
     //     page: 1
     // });
 
-    const article = await kv.articles.getById(process.env.ARTICLE_ID)
+    //const article = await kv.articles.getById(process.env.ARTICLE_ID)
+    //const article = await kv.articles.getBySlug('title-3')
+    //console.log(article)
 
-    console.log(article)
+    const tags = await kv.tags.list()
+    console.log(tags)
 });
 
 

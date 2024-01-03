@@ -3,14 +3,13 @@ import process from 'node:process';
 
 class KeyVox {
     baseURL = process.env.APP_LOCAL_URL ?? 'https://keyvox.dev/api';
+
     /**
      *
      * @param {string} apiKey
      */
     constructor(apiKey) {
         this.apiKey = apiKey;
-
-
 
         this.articles = {
             /**
@@ -75,10 +74,49 @@ class KeyVox {
              * @param {string} slug
              */
             getBySlug: async (slug) => {
-                console.log(slug);
+                try {
+                    let url = `${this.baseURL}/api/articles/${slug}`;
+                    const headers = {
+                        key: this.apiKey,
+                    };
+
+                    const response = await fetch(url, {
+                        method: 'get',
+                        headers,
+                    });
+
+                    const data = await response.json();
+                    return data;
+                } catch (error) {
+                    console.log(error);
+                }
+            }
+        }
+
+        this.tags = {
+            list: async () => {
+                try {
+                    let url = `${this.baseURL}/api/tags`;
+
+                    const headers = {
+                        key: this.apiKey,
+                    };
+
+                    const response = await fetch(url, {
+                        method: 'get',
+                        headers
+                    });
+
+                    const data = await response.json();
+                    return data;
+                } catch (error) {
+                    console.log(error)
+                }
             }
         }
     }
+
+
 }
 
 export default KeyVox
