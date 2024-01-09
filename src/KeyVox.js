@@ -46,7 +46,7 @@ class KeyVox {
             getBySlug: async (slug) => {
                 const url = `${this.baseURL}/api/articles/${slug}`;
                 return await this.fetchData(url, 'get');
-            }
+            },
         }
 
         this.tags = {
@@ -94,7 +94,7 @@ class KeyVox {
 
             return await response.json();
         } catch (error) {
-            console.log(error)
+            console.log(error);
         }
     }
 }
