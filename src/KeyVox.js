@@ -1,15 +1,16 @@
-import 'dotenv/config';
-import process from 'node:process';
-
 class KeyVox {
-    baseURL = process.env.APP_LOCAL_URL ?? 'https://keyvox.dev/api';
+    baseURL = ''
 
     /**
      *
      * @param {string} apiKey
+     * @param {Object} options
      */
-    constructor(apiKey) {
+    constructor(apiKey, options) {
         this.apiKey = apiKey;
+
+        this.baseURL = options?.baseURL ?? 'https://keyvox.dev/api'
+
 
         this.articles = {
             /**
@@ -17,16 +18,25 @@ class KeyVox {
              * @returns {Promise<Object>}
              */
             list: async (option) => {
-                const {itemsPerPage} = option ?? 2
-                let url = `${this.baseURL}/api/articles`;
+
+                const {itemsPerPage} = option ?? 2;
+                const {page} = option ?? 1;
+
+                let url = `${this.baseURL}/articles`;
+
                 url = new URL(url)
+
                 if (itemsPerPage) {
                     url.searchParams.append('itemsPerPage', itemsPerPage)
                 }
 
+                if (page) {
+                    url.searchParams.append('page', page)
+                }
+
                 url = url.toString();
 
-                return await this.fetchData(url, 'get');
+                return await this.#fetchData(url, 'get');
             },
 
             /**
@@ -36,7 +46,7 @@ class KeyVox {
              */
             getById: async (id) => {
                 const url = `${this.baseURL}/api/articles/${id}`;
-                return await this.fetchData(url, 'get');
+                return await this.#fetchData(url, 'get');
             },
 
             /**
@@ -45,7 +55,7 @@ class KeyVox {
              */
             getBySlug: async (slug) => {
                 const url = `${this.baseURL}/api/articles/${slug}`;
-                return await this.fetchData(url, 'get');
+                return await this.#fetchData(url, 'get');
             },
         }
 
@@ -56,7 +66,7 @@ class KeyVox {
              */
             list: async () => {
                 const url = `${this.baseURL}/api/tags`;
-                return await this.fetchData(url, 'get');
+                return await this.#fetchData(url, 'get');
             },
 
             /**
@@ -66,7 +76,7 @@ class KeyVox {
              */
             getById: async (id) => {
                 const url = `${this.baseURL}/api/tags/${id}`;
-                return await this.fetchData(url, 'get');
+                return await this.#fetchData(url, 'get');
             },
 
             /**
@@ -76,12 +86,12 @@ class KeyVox {
              */
             getBySlug: async (slug) => {
                 const url = `${this.baseURL}/api/tags/${slug}`;
-                return await this.fetchData(url, 'get');
+                return await this.#fetchData(url, 'get');
             },
         }
     }
 
-    async fetchData(url, verb) {
+    async #fetchData(url, verb) {
         try {
             const headers = {
                 key: this.apiKey,
@@ -91,6 +101,10 @@ class KeyVox {
                 method: verb,
                 headers
             });
+
+            if ( ! response.ok) {
+                throw new Error(`Request failed with status ${response.status}`);
+            }
 
             return await response.json();
         } catch (error) {

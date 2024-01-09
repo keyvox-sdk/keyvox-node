@@ -4,7 +4,7 @@ import KeyVox from '../src/KeyVox.js';
 import 'dotenv/config'
 
 const kv = new KeyVox(process.env.KEY)
-test('articles.list()', {skip: true}, async (t) => {
+test('articles.list()', {skip: false}, async (t) => {
     const articles = await kv.articles.list({
         itemsPerPage: 2,
         page: 1
@@ -33,7 +33,7 @@ test('tags.getById()', {skip: true}, async (t) => {
     console.log(tag)
 })
 
-test('tags.getBySlug()', {skip: false}, async (t) => {
+test('tags.getBySlug()', {skip: true}, async (t) => {
     const tag = await kv.tags.getBySlug('bitcoin')
     console.log(tag)
 })
