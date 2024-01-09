@@ -1,6 +1,6 @@
 {
   "name": "keyvox-node",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Official SDK for Node.js projects",
   "main": "src/index.js",
   "scripts": {
